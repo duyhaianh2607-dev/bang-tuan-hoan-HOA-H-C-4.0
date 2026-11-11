@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bảng Tuần Hoàn Các Nguyên Tố Hóa Học IUPAC Chuẩn 118 Nguyên Tố</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #090d16;
+            color: #f8fafc;
+        }
+
+        /* Grid layout cho Bảng tuần hoàn chuẩn 18 cột */
+        .ptable-grid {
+            display: grid;
+            grid-template-columns: repeat(18, minmax(46px, 1fr));
+            gap: 2.5px;
+        }
+
+        @media (max-width: 1024px) {
+            .ptable-container {
+                overflow-x: auto;
+            }
+            .ptable-grid {
+                min-width: 950px;
+            }
+        }
+
+        /* Phân loại màu sắc các nhóm nguyên tố */
+        .cat-phi-kim { background-color: rgba(34, 197, 94, 0.18); border-color: rgba(34, 197, 94, 0.45); color: #4ade80; }
+        .cat-khi-hiem { background-color: rgba(168, 85, 247, 0.18); border-color: rgba(168, 85, 247, 0.45); color: #c084fc; }
+        .cat-kim-loai-kiem { background-color: rgba(239, 68, 68, 0.18); border-color: rgba(239, 68, 68, 0.45); color: #f87171; }
+        .cat-kim-loai-kiem-tho { background-color: rgba(249, 115, 22, 0.18); border-color: rgba(249, 115, 22, 0.45); color: #fb923c; }
+        .cat-ban-kim { background-color: rgba(20, 184, 166, 0.18); border-color: rgba(20, 184, 166, 0.45); color: #2dd4bf; }
+        .cat-halozen { background-color: rgba(236, 72, 153, 0.18); border-color: rgba(236, 72, 153, 0.45); color: #f472b6; }
+        .cat-kim-loai-chuyen-tiep { background-color: rgba(59, 130, 246, 0.18); border-color: rgba(59, 130, 246, 0.45); color: #60a5fa; }
+        .cat-kim-loai-yeu { background-color: rgba(107, 114, 128, 0.18); border-color: rgba(107, 114, 128, 0.45); color: #9ca3af; }
+        .cat-lanthan { background-color: rgba(234, 179, 8, 0.18); border-color: rgba(234, 179, 8, 0.45); color: #facc15; }
+        .cat-actini { background-color: rgba(217, 70, 239, 0.18); border-color: rgba(217, 70, 239, 0.45); color: #e879f9; }
+
+        .element-card {
+            transition: all 0.2s ease-in-out;
+        }
+
+        .element-card:hover {
+            transform: scale(1.15);
+            z-index: 30;
+            box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.7);
+        }
+
+        .element-card.dimmed {
+            opacity: 0.15;
+            filter: grayscale(85%);
+        }
+
+        .element-card.highlighted {
+            animation: pulse 1.5s infinite alternate;
+            z-index: 20;
+        }
+
+        .tab-btn.active {
+            background-color: #2563eb;
+            color: #ffffff;
+            border-color: #3b82f6;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #090d16;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between p-4 md:p-6">
+
+    <!-- Header Section -->
+    <header class="max-w-7xl mx-auto w-full mb-6">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+            <div>
+                <h1 class="text-2xl md:text-3xl font-black bg-gradient-to-r from-blue-400 via-teal-300 to-purple-500 bg-clip-text text-transparent">
+                    BẢNG TUẦN HOÀN 118 NGUYÊN TỐ IUPAC
+                </h1>
+                <p class="text-sm text-slate-400 mt-1">Đầy đủ đồng vị, mô hình Bohr, tinh thể 3D, điều chế, ứng dụng và người tìm ra</p>
+            </div>
+
+            <!-- Main Navigation Tabs -->
+            <div class="flex items-center gap-2 bg-slate-900/90 p-1.5 rounded-xl border border-slate-800">
+                <button id="tabPTable" class="tab-btn active px-3.5 py-2 rounded-lg text-xs md:text-sm font-semibold transition-all flex items-center gap-2 text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-table-cells font-bold"></i><span>Bảng tuần hoàn</span>
+                </button>
+                <button id="tabSolubility" class="tab-btn px-3.5 py-2 rounded-lg text-xs md:text-sm font-semibold transition-all flex items-center gap-2 text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-droplet font-bold"></i><span>Bảng độ tan</span>
+                </button>
+                <button id="tabAcids" class="tab-btn px-3.5 py-2 rounded-lg text-xs md:text-sm font-semibold transition-all flex items-center gap-2 text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-flask font-bold"></i><span>Gốc Acid</span>
+                </button>
+                <button id="tabElectro" class="tab-btn px-3.5 py-2 rounded-lg text-xs md:text-sm font-semibold transition-all flex items-center gap-2 text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-bolt font-bold"></i><span>Dãy điện hóa</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Toolbar / Search -->
+        <div id="ptableTools" class="mt-4">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-3">
+                <div class="relative min-w-[260px] flex-grow md:flex-grow-0">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                    <input type="text" id="searchInput" placeholder="Tìm theo tên, ký hiệu, Z..." 
+                        class="w-full pl-9 pr-4 py-2 bg-slate-900 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:border-blue-500 transition-colors">
+                </div>
+                <button id="resetFilterBtn" class="px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-slate-300 rounded-xl text-sm font-medium border border-slate-700 transition-colors">
+                    <i class="fa-solid fa-rotate-left mr-1.5"></i>Đặt lại bộ lọc
+                </button>
+            </div>
+
+            <!-- Group Legends Filter -->
+            <div class="flex flex-wrap items-center gap-2 text-xs font-medium" id="categoryLegend">
+                <button data-cat="all" class="cat-btn active px-3.5 py-1.5 rounded-lg bg-blue-600 text-white shadow-sm border border-blue-500">Tất cả</button>
+                <button data-cat="kim-loai-kiem" class="cat-btn px-2.5 py-1.5 rounded-lg border cat-kim-loai-kiem">Kim loại kiềm</button>
+                <button data-cat="kim-loai-kiem-tho" class="cat-btn px-2.5 py-1.5 rounded-lg border cat-kim-loai-kiem-tho">Kiềm thổ</button>
+                <button data-cat="kim-loai-chuyen-tiep" class="cat-btn px-2.5 py-1.5 rounded-lg border cat-kim-loai-chuyen-tiep">Chuyển tiếp</button>
+                <button data-cat="kim-loai-yeu" class="cat-btn px-2.5 py-1.5 rounded-lg border cat-kim-loai-yeu">Kim loại yếu</button>
+                <button data-cat="ban-kim" class="cat-btn px-2.5 py-1.5 rounded-lg border cat-ban-kim">Bán kim</button>
+                <button data-cat="phi-kim" class="cat-btn px-2.5 py-1.5 rounded-lg border cat-phi-kim">Phi kim</button>
+                <button data-cat="halozen" class="cat-btn px-2.5 py-1.5 rounded-lg border cat-halozen">Halogen</button>
+                <button data-cat="khi-hiem" class="cat-btn px-2.5 py-1.5 rounded-lg border cat-khi-hiem">Khí hiếm</button>
+                <button data-cat="lanthan" class="cat-btn px-2.5 py-1.5 rounded-lg border cat-lanthan">Họ Lanthan</button>
+                <button data-cat="actini" class="cat-btn px-2.5 py-1.5 rounded-lg border cat-actini">Họ Actini</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- TAB 1: Periodic Table Layout Container -->
+    <main id="viewPTable" class="tab-view max-w-7xl mx-auto w-full ptable-container mb-6 flex-grow">
+        <!-- IUPAC Group Numbers Header (Traditional Groups IA-VIIIB) -->
+        <div class="flex items-center mb-1">
+            <div class="w-14 text-center text-[10px] font-bold text-slate-500 uppercase tracking-wider leading-tight">CK \ Nhóm</div>
+            <div class="ptable-grid flex-grow text-center">
+                <div class="flex flex-col justify-center items-center h-full"><span class="text-[10px] text-blue-400 font-bold">IA</span></div>
+                <div class="flex flex-col justify-center items-center h-full"><span class="text-[10px] text-blue-400 font-bold">IIA</span></div>
+                <div class="flex flex-col justify-center items-center h-full"><span class="text-[10px] text-purple-400 font-bold">IIIB</span></div>
+                <div class="flex flex-col justify-center items-center h-full"><span class="text-[10px] text-purple-400 font-bold">IVB</span></div>
+                <div class="flex flex-col justify-center items-center h-full"><span class="text-[10px] text-purple-400 font-bold">VB</span></div>
+                <div class="flex flex-col justify-center items-center h-full"><span class="text-[10px] text-purple-400 font-bold">VIB</span></div>
+                <div class="flex flex-col justify-center items-center h-full"><span class="text-[10px] text-purple-400 font-bold">VIIB</span></div>
+                <div class="flex flex-col justify-center items-center h-full"><span class="text-[10px] text-purple-400 font-bold">VIIIB</span></div>
+                <div class="flex flex-col justify-center items-center h-full"><span class="text-[10px] text-purple-400 font-bold">VIIIB</span></div>
+                <div class="flex flex-col justify-center items-center h-full"><span class="text-[10px] text-purple-400 font-bold">VIIIB</span></div>
+                <div class="flex flex-col justify-center items-center h-full"><span class="text-[10px] text-purple-400 font-bold">IB</span></div>
+                <div class="flex flex-col justify-center items-center h-full"><span class="text-[10px] text-purple-400 font-bold">IIB</span></div>
+                <div class="flex flex-col justify-center items-center h-full"><span class="text-[10px] text-teal-400 font-bold">IIIA</span></div>
+                <div class="flex flex-col justify-center items-center h-full"><span class="text-[10px] text-teal-400 font-bold">IVA</span></div>
+                <div class="flex flex-col justify-center items-center h-full"><span class="text-[10px] text-teal-400 font-bold">VA</span></div>
+                <div class="flex flex-col justify-center items-center h-full"><span class="text-[10px] text-teal-400 font-bold">VIA</span></div>
+                <div class="flex flex-col justify-center items-center h-full"><span class="text-[10px] text-teal-400 font-bold">VIIA</span></div>
+                <div class="flex flex-col justify-center items-center h-full"><span class="text-[10px] text-purple-300 font-bold">VIIIA</span></div>
+            </div>
+        </div>
+
+        <!-- Main Periodic Table Grid with Period Row Headers (1-7) -->
+        <div class="space-y-1">
+            <div class="flex items-center gap-1">
+                <div class="w-14 text-center font-bold text-xs text-blue-400 bg-slate-900/80 py-3.5 rounded-xl border border-slate-800">CK 1</div>
+                <div id="period1Grid" class="ptable-grid flex-grow"></div>
+            </div>
+            <div class="flex items-center gap-1">
+                <div class="w-14 text-center font-bold text-xs text-blue-400 bg-slate-900/80 py-7 rounded-xl border border-slate-800">CK 2</div>
+                <div id="period2Grid" class="ptable-grid flex-grow"></div>
+            </div>
+            <div class="flex items-center gap-1">
+                <div class="w-14 text-center font-bold text-xs text-blue-400 bg-slate-900/80 py-7 rounded-xl border border-slate-800">CK 3</div>
+                <div id="period3Grid" class="ptable-grid flex-grow"></div>
+            </div>
+            <div class="flex items-center gap-1">
+                <div class="w-14 text-center font-bold text-xs text-blue-400 bg-slate-900/80 py-11 rounded-xl border border-slate-800">CK 4</div>
+                <div id="period4Grid" class="ptable-grid flex-grow"></div>
+            </div>
+            <div class="flex items-center gap-1">
+                <div class="w-14 text-center font-bold text-xs text-blue-400 bg-slate-900/80 py-11 rounded-xl border border-slate-800">CK 5</div>
+                <div id="period5Grid" class="ptable-grid flex-grow"></div>
+            </div>
+            <div class="flex items-center gap-1">
+                <div class="w-14 text-center font-bold text-xs text-blue-400 bg-slate-900/80 py-11 rounded-xl border border-slate-800">CK 6</div>
+                <div id="period6Grid" class="ptable-grid flex-grow"></div>
+            </div>
+            <div class="flex items-center gap-1">
+                <div class="w-14 text-center font-bold text-xs text-blue-400 bg-slate-900/80 py-11 rounded-xl border border-slate-800">CK 7</div>
+                <div id="period7Grid" class="ptable-grid flex-grow"></div>
+            </div>
+        </div>
+
+        <!-- Separator for Lanthanides & Actinides -->
+        <div class="my-5 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-500 px-2">
+            <span>* Dòng họ Lanthan (57 - 71)</span>
+            <span>** Dòng họ Actini (89 - 103)</span>
+        </div>
+
+        <!-- Lanthanide & Actinide Rows Grid with Row Labels -->
+        <div class="space-y-1">
+            <div class="flex items-center gap-1">
+                <div class="w-14 text-center font-bold text-xs text-amber-400 bg-slate-900/80 py-5 rounded-xl border border-slate-800">* La</div>
+                <div id="fBlockLanthan" class="ptable-grid flex-grow"></div>
+            </div>
+            <div class="flex items-center gap-1">
+                <div class="w-14 text-center font-bold text-xs text-purple-400 bg-slate-900/80 py-5 rounded-xl border border-slate-800">** Ac</div>
+                <div id="fBlockActinid" class="ptable-grid flex-grow"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- TAB 2: Solubility Table View -->
+    <main id="viewSolubility" class="tab-view max-w-7xl mx-auto w-full mb-6 flex-grow hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 md:p-6 shadow-xl">
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-800 pb-4 mb-4">
+                <div>
+                    <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-droplet text-blue-400"></i> Bảng tính tan trong nước nâng cao của Muối, Acid và Base
+                    </h3>
+                    <p class="text-xs text-slate-400 mt-1">Được tính ở điều kiện phòng (~25°C) với đầy đủ các cation và anion chuẩn hóa học</p>
+                </div>
+                <div class="flex flex-wrap items-center gap-2 text-xs font-semibold">
+                    <span class="px-2.5 py-1 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">T : Tan tốt</span>
+                    <span class="px-2.5 py-1 rounded bg-rose-500/20 text-rose-400 border border-rose-500/40">K : Không tan (Tủa)</span>
+                    <span class="px-2.5 py-1 rounded bg-amber-500/20 text-amber-400 border border-amber-500/40">Í : Ít tan</span>
+                    <span class="px-2.5 py-1 rounded bg-purple-500/20 text-purple-400 border border-purple-500/40">Ph : Phân hủy</span>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-4 mb-6 bg-slate-950 p-4 rounded-xl border border-slate-800">
+                <div class="flex items-center gap-2">
+                    <label class="text-xs font-semibold text-slate-400">Cation (Ion dương):</label>
+                    <select id="solubilityCationSelect" class="bg-slate-900 border border-slate-700 text-xs text-slate-200 rounded-lg p-2.5 focus:outline-none focus:border-blue-500">
+                        <option value="all">-- Tất cả Cation --</option>
+                    </select>
+                </div>
+                <div class="flex items-center gap-2">
+                    <label class="text-xs font-semibold text-slate-400">Anion (Ion âm):</label>
+                    <select id="solubilityAnionSelect" class="bg-slate-900 border border-slate-700 text-xs text-slate-200 rounded-lg p-2.5 focus:outline-none focus:border-blue-500">
+                        <option value="all">-- Tất cả Anion --</option>
+                    </select>
+                </div>
+                <div id="solubilityQuickResult" class="text-xs font-bold text-teal-300 ml-auto hidden sm:block bg-teal-950/60 px-3 py-2 rounded-lg border border-teal-800/50"></div>
+            </div>
+
+            <div class="overflow-x-auto rounded-xl border border-slate-800 max-h-[600px] overflow-y-auto">
+                <table class="w-full text-center text-xs border-collapse" id="solubilityMatrixTable"></table>
+            </div>
+        </div>
+    </main>
+
+    <!-- TAB 3: Common Acid Radicals View -->
+    <main id="viewAcids" class="tab-view max-w-7xl mx-auto w-full mb-6 flex-grow hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 md:p-6 shadow-xl">
+            <div class="border-b border-slate-800 pb-4 mb-6">
+                <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-flask text-teal-400"></i> Bảng Tra Cứu Gốc Acid Nâng Cao
+                </h3>
+                <p class="text-xs text-slate-400 mt-1">Hệ thống danh sách công thức, hóa trị, axit tương ứng, độ mạnh và tính chất hóa học chuyên sâu</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="acidRadicalsGrid"></div>
+        </div>
+    </main>
+
+    <!-- TAB 4: Electrochemical Series View -->
+    <main id="viewElectro" class="tab-view max-w-7xl mx-auto w-full mb-6 flex-grow hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 md:p-6 shadow-xl">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-4 mb-6">
+                <div>
+                    <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-bolt text-yellow-400"></i> Dãy Điện Hóa Của Kim Loại (Hoạt Động Hóa Học)
+                    </h3>
+                    <p class="text-xs text-slate-400 mt-1">Sắp xếp theo chiều tính khử của kim loại giảm dần và tính oxy hóa của ion tăng dần</p>
+                </div>
+                <div class="flex items-center gap-2 text-xs font-semibold bg-slate-950 px-3.5 py-2 rounded-xl border border-slate-800">
+                    <span class="text-blue-400">Tính khử giảm dần ➔</span>
+                    <span class="text-slate-500">|</span>
+                    <span class="text-amber-400">➔ Tính oxy hóa tăng dần</span>
+                </div>
+            </div>
+
+            <!-- Electrochemical Table Container -->
+            <div class="overflow-x-auto rounded-xl border border-slate-800">
+                <table class="w-full text-left text-xs border-collapse">
+                    <thead>
+                        <tr class="bg-slate-950 text-slate-300 border-b border-slate-700">
+                            <th class="p-3 text-center w-16">STT</th>
+                            <th class="p-3">Cặp Oxy hóa - Khử</th>
+                            <th class="p-3">Phản ứng nửa tế bào (Chiều thuận)</th>
+                            <th class="p-3 text-center">Thế điện cực chuẩn $E^\circ$ (V)</th>
+                            <th class="p-3">Tính chất đặc trưng</th>
+                        </tr>
+                    </thead>
+                    <tbody id="electroTableBody" class="divide-y divide-slate-800/80">
+                        <!-- Dynamic generated by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="max-w-7xl mx-auto w-full border-t border-slate-800 pt-4 text-center text-xs text-slate-500">
+        <p>Bảng tuần hoàn các nguyên tố hóa học chuẩn IUPAC - Đầy đủ 118 nguyên tố</p>
+    </footer>
+
+    <!-- Element Detail Modal Pop-up -->
+    <div id="elementModal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-slate-700 rounded-3xl max-w-3xl w-full max-h-[92vh] overflow-y-auto shadow-2xl relative" id="modalContent">
+            <button id="closeModalBtn" class="absolute top-5 right-5 w-10 h-10 flex items-center justify-center rounded-full bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors z-20">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <!-- Modal Header -->
+            <div id="modalHeader" class="p-6 border-b border-slate-800 relative overflow-hidden">
+                <div class="flex items-center gap-6 relative z-10">
+                    <div id="modalBigSymbol" class="w-24 h-24 rounded-2xl border-2 flex flex-col items-center justify-center font-bold shadow-xl">
+                        <span id="modalAtomicNum" class="text-xs opacity-75 self-start pl-2.5 pt-1"></span>
+                        <span id="modalSymbol" class="text-4xl my-auto font-black"></span>
+                        <span id="modalMass" class="text-[10px] opacity-75 pb-1 font-mono"></span>
+                    </div>
+                    <div>
+                        <span id="modalCategoryBadge" class="inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider mb-2 border"></span>
+                        <h2 id="modalNameVi" class="text-3xl font-extrabold text-white"></h2>
+                        <h3 id="modalNameEn" class="text-sm font-medium text-slate-400 italic"></h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Details & Interactive Tabs -->
+            <div class="p-6 space-y-6">
+                <!-- Quick Info Cards Grid -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+                        <span class="text-[11px] text-slate-400 block mb-1"><i class="fa-solid fa-layer-group text-blue-400 mr-1"></i>Chu kỳ & Nhóm</span>
+                        <span id="modalPeriodGroup" class="text-sm font-semibold text-slate-200"></span>
+                    </div>
+                    <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+                        <span class="text-[11px] text-slate-400 block mb-1"><i class="fa-solid fa-temperature-half text-amber-400 mr-1"></i>Trạng thái</span>
+                        <span id="modalState" class="text-sm font-semibold text-slate-200"></span>
+                    </div>
+                    <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+                        <span class="text-[11px] text-slate-400 block mb-1"><i class="fa-solid fa-bolt text-yellow-400 mr-1"></i>Độ âm điện</span>
+                        <span id="modalElectronegativity" class="text-sm font-semibold text-slate-200"></span>
+                    </div>
+                    <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+                        <span class="text-[11px] text-slate-400 block mb-1"><i class="fa-solid fa-atom text-purple-400 mr-1"></i>Hóa trị phổ biến</span>
+                        <span id="modalValency" class="text-sm font-semibold text-purple-300"></span>
+                    </div>
+                </div>
+                <!-- Hidden helper span to prevent missing element errors -->
+                <span id="modalRadius" class="hidden"></span>
+
+                <!-- Modal Tabs Navigation -->
+                <div class="flex flex-wrap items-center gap-1.5 border-b border-slate-800 pb-3">
+                    <button id="btn_mSecInfo" onclick="switchModalTab('mSecInfo')" class="modal-tab-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-blue-600 text-white border border-blue-500 transition-all">Thông tin chung</button>
+                    <button id="btn_mSecIsotopes" onclick="switchModalTab('mSecIsotopes')" class="modal-tab-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-800 text-slate-300 border border-slate-700 transition-all">Đồng vị</button>
+                    <button id="btn_mSecPrep" onclick="switchModalTab('mSecPrep')" class="modal-tab-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-800 text-slate-300 border border-slate-700 transition-all">Điều chế</button>
+                    <button id="btn_mSecBohr" onclick="switchModalTab('mSecBohr')" class="modal-tab-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-800 text-slate-300 border border-slate-700 transition-all">Mô hình Bohr</button>
+                    <button id="btn_mSecCrystal" onclick="switchModalTab('mSecCrystal')" class="modal-tab-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-800 text-slate-300 border border-slate-700 transition-all">Tinh thể 3D</button>
+                </div>
+
+                <!-- Tab 1: General Info -->
+                <div id="mSecInfo" class="modal-section space-y-4">
+                    <div class="space-y-3">
+                        <h4 class="text-xs uppercase tracking-wider font-bold text-slate-400 border-b border-slate-800 pb-1">Đặc tính Vật lý & Hóa học</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-y-2.5 gap-x-6 text-sm">
+                            <div class="flex justify-between border-b border-slate-800/60 pb-1">
+                                <span class="text-slate-400">Cấu hình obital chi tiết:</span>
+                                <span id="modalElectronConfig" class="font-mono text-blue-300 font-medium"></span>
+                            </div>
+                            <div class="flex justify-between border-b border-slate-800/60 pb-1">
+                                <span class="text-slate-400">Nhiệt độ nóng chảy:</span>
+                                <span id="modalMelting" class="text-slate-200 font-medium"></span>
+                            </div>
+                            <div class="flex justify-between border-b border-slate-800/60 pb-1">
+                                <span class="text-slate-400">Nhiệt độ sôi:</span>
+                                <span id="modalBoiling" class="text-slate-200 font-medium"></span>
+                            </div>
+                            <div class="flex justify-between border-b border-slate-800/60 pb-1">
+                                <span class="text-slate-400">Mật độ khối lượng:</span>
+                                <span id="modalDensity" class="text-slate-200 font-medium"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <h4 class="text-xs uppercase tracking-wider font-bold text-slate-400 border-b border-slate-800 pb-1">Lịch sử phát hiện</h4>
+                        <div class="text-sm text-slate-300 bg-slate-950 p-3.5 rounded-xl border border-slate-800">
+                            <p><span class="text-slate-400">Năm phát hiện:</span> <span id="modalDiscoveredYear" class="font-semibold text-slate-200"></span></p>
+                            <p class="mt-1"><span class="text-slate-400">Người phát hiện:</span> <span id="modalDiscoveredBy" class="font-semibold text-slate-200"></span></p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <h4 class="text-xs uppercase tracking-wider font-bold text-slate-400 border-b border-slate-800 pb-1">Mô tả & Ứng dụng thực tế</h4>
+                        <p id="modalDescription" class="text-sm text-slate-300 leading-relaxed bg-slate-950 p-3.5 rounded-xl border border-slate-800"></p>
+                    </div>
+                </div>
+
+                <!-- Tab 2: Isotopes -->
+                <div id="mSecIsotopes" class="modal-section hidden space-y-3">
+                    <h4 class="text-xs uppercase tracking-wider font-bold text-slate-400 border-b border-slate-800 pb-1">Các đồng vị tự nhiên & phóng xạ phổ biến</h4>
+                    <div id="modalIsotopesContainer" class="space-y-2.5 text-sm"></div>
+                </div>
+
+                <!-- Tab 3: Preparation Methods -->
+                <div id="mSecPrep" class="modal-section hidden space-y-4">
+                    <h4 class="text-xs uppercase tracking-wider font-bold text-slate-400 border-b border-slate-800 pb-1">Phương pháp điều chế</h4>
+                    <div class="space-y-3 text-sm">
+                        <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800">
+                            <h5 class="text-xs font-bold text-blue-400 uppercase tracking-wider mb-1"><i class="fa-solid fa-industry mr-1.5"></i>Trong công nghiệp</h5>
+                            <p id="modalPrepInd" class="text-slate-300 leading-relaxed"></p>
+                        </div>
+                        <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800">
+                            <h5 class="text-xs font-bold text-teal-400 uppercase tracking-wider mb-1"><i class="fa-solid fa-flask-vial mr-1.5"></i>Trong phòng thí nghiệm</h5>
+                            <p id="modalPrepLab" class="text-slate-300 leading-relaxed"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 4: Bohr Model Simulation -->
+                <div id="mSecBohr" class="modal-section hidden space-y-4 text-center">
+                    <h4 class="text-xs uppercase tracking-wider font-bold text-slate-400 border-b border-slate-800 pb-1 text-left">Mô hình nguyên tử Bohr 2D</h4>
+                    <div class="relative w-full flex justify-center items-center bg-slate-950 rounded-2xl p-3 border border-slate-800">
+                        <canvas id="bohrCanvas" class="w-full max-w-[340px] h-[300px] rounded"></canvas>
+                    </div>
+                    <div id="bohrShellInfo" class="flex flex-wrap justify-center gap-3 text-xs text-slate-300 bg-slate-950 p-3 rounded-xl border border-slate-800"></div>
+                </div>
+
+                <!-- Tab 5: Crystal Simulation -->
+                <div id="mSecCrystal" class="modal-section hidden space-y-4 text-center">
+                    <h4 id="crystalModelTitle" class="text-xs uppercase tracking-wider font-bold text-slate-400 border-b border-slate-800 pb-1 text-left">Cấu trúc mạng tinh thể 3D</h4>
+                    <div class="relative w-full flex justify-center items-center bg-slate-950 rounded-2xl p-3 border border-slate-800">
+                        <canvas id="crystalCanvas" class="w-full max-w-[320px] h-[300px] rounded cursor-grab active:cursor-grabbing"></canvas>
+                    </div>
+                    <p class="text-xs text-slate-400">💡 Rê chuột hoặc dùng ngón tay để xoay mô hình không gian 3D.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Three.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // Database of base elements 1-10
+        const elementsData = [
+            { z: 1, sym: "H", nameVi: "Hydro (Hydrogen)", nameEn: "Hydrogen", mass: "1.008", cat: "phi-kim", period: 1, group: 1, config: "1s¹", valency: "I", state: "Khí", electro: 2.20, radius: 53, melt: -259.1, boil: -252.9, density: "0.0899 g/L", year: "1766", discoverer: "Henry Cavendish", desc: "Nguyên tố phổ biến nhất trong vũ trụ. Dùng làm nhiên liệu tên lửa, sản xuất amoniac.", isotopes: [{name: "Protium (¹H)", abundance: "99.988%", note: "Bền, không có nơtron"}, {name: "Deuterium (²H)", abundance: "0.012%", note: "Bền, dùng làm nước nặng"}, {name: "Tritium (³H)", abundance: "Vết", note: "Phóng xạ β, chu kỳ bán rã 12.3 năm"}], prepInd: "Điện phân nước hoặc reforming khí thiên nhiên.", prepLab: "Cho kim loại hoạt động (Zn, Fe) tác dụng với dung dịch axit HCl loãng.", crystalType: "HCP" },
+            { z: 2, sym: "He", nameVi: "Heli (Helium)", nameEn: "Helium", mass: "4.0026", cat: "khi-hiem", period: 1, group: 18, config: "1s²", valency: "0 (Trơ)", state: "Khí", electro: null, radius: 31, melt: -272.2, boil: -268.9, density: "0.1786 g/L", year: "1868", discoverer: "Pierre Janssen", desc: "Khí trơ nhẹ thứ hai. Ứng dụng bơm khinh khí cầu và làm mát máy MRI.", isotopes: [{name: "Heli-3 (³He)", abundance: "0.000137%", note: "Bền"}, {name: "Heli-4 (⁴He)", abundance: "99.99986%", note: "Bền"}], prepInd: "Tách từ khí tự nhiên chứa hàm lượng heli cao.", prepLab: "Thu hồi từ khí khoáng sản tự nhiên.", crystalType: "HCP" },
+            { z: 3, sym: "Li", nameVi: "Liti (Lithium)", nameEn: "Lithium", mass: "6.94", cat: "kim-loai-kiem", period: 2, group: 1, config: "1s² 2s¹", valency: "I", state: "Rắn", electro: 0.98, radius: 167, melt: 180.5, boil: 1342, density: "0.534 g/cm³", year: "1817", discoverer: "Johan August Arfwedson", desc: "Kim loại nhẹ nhất, quan trọng trong sản xuất pin sạc Li-ion.", isotopes: [{name: "Liti-6 (⁶Li)", abundance: "7.59%", note: "Bền"}, {name: "Liti-7 (⁷Li)", abundance: "92.41%", note: "Bền"}], prepInd: "Điện phân hỗn hợp muối LiCl và KCl nóng chảy.", prepLab: "Khử muối liti bằng nhiệt độ cao.", crystalType: "BCC" },
+            { z: 4, sym: "Be", nameVi: "Bêryli (Beryllium)", nameEn: "Beryllium", mass: "9.0122", cat: "kim-loai-kiem-tho", period: 2, group: 2, config: "1s² 2s²", valency: "II", state: "Rắn", electro: 1.57, radius: 112, melt: 1287, boil: 2469, density: "1.85 g/cm³", year: "1798", discoverer: "Louis-Nicolas Vauquelin", desc: "Kim loại nhẹ, cứng, dùng trong hợp kim hàng không vũ trụ.", isotopes: [{name: "Bêryli-9 (⁹Be)", abundance: "100%", note: "Đồng vị bền duy nhất"}], prepInd: "Khử BeF₂ bằng magie ở nhiệt độ cao.", prepLab: "Điện phân muối BeCl₂ nóng chảy.", crystalType: "HCP" },
+            { z: 5, sym: "B", nameVi: "Bo (Boron)", nameEn: "Boron", mass: "10.81", cat: "ban-kim", period: 2, group: 13, config: "1s² 2s² 2p¹", valency: "III", state: "Rắn", electro: 2.04, radius: 87, melt: 2076, boil: 3927, density: "2.34 g/cm³", year: "1808", discoverer: "J.L. Gay-Lussac", desc: "Bán kim dùng trong thủy tinh chịu nhiệt Pyrex và chất bán dẫn.", isotopes: [{name: "Bo-10 (¹⁰B)", abundance: "19.9%", note: "Bền"}, {name: "Bo-11 (¹¹B)", abundance: "80.1%", note: "Bền"}], prepInd: "Khử oxit bo (B₂O₃) bằng magie.", prepLab: "Nhiệt phân hợp chất trichloroboran.", crystalType: "Rhombohedral" },
+            { z: 6, sym: "C", nameVi: "Cacbon (Carbon)", nameEn: "Carbon", mass: "12.011", cat: "phi-kim", period: 2, group: 14, config: "1s² 2s² 2p²", valency: "IV, II", state: "Rắn", electro: 2.55, radius: 67, melt: 3550, boil: 4027, density: "2.267 g/cm³", year: "Cổ đại", discoverer: "Thời cổ đại", desc: "Nền tảng của sự sống hữu cơ, tồn tại dạng kim cương và than chì.", isotopes: [{name: "Cacbon-12 (¹²C)", abundance: "98.93%", note: "Bền"}, {name: "Cacbon-13 (¹³C)", abundance: "1.07%", note: "Bền"}, {name: "Cacbon-14 (¹⁴C)", abundance: "Vết", note: "Phóng xạ β"}], prepInd: "Khai thác than mỏ hoặc tổng hợp than hoạt tính.", prepLab: "Nhiệt phân chất hữu cơ trong điều kiện thiếu không khí.", crystalType: "Diamond" },
+            { z: 7, sym: "N", nameVi: "Nitơ (Nitrogen)", nameEn: "Nitrogen", mass: "14.007", cat: "phi-kim", period: 2, group: 15, config: "1s² 2s² 2p³", valency: "III, IV, V, II", state: "Khí", electro: 3.04, radius: 56, melt: -210.0, boil: -195.8, density: "1.251 g/L", year: "1772", discoverer: "Daniel Rutherford", desc: "Chiếm 78% khí quyển, dùng sản xuất phân bón và bảo quản.", isotopes: [{name: "Nitơ-14 (¹⁴N)", abundance: "99.636%", note: "Bền"}, {name: "Nitơ-15 (¹⁵N)", abundance: "0.364%", note: "Bền"}], prepInd: "Chưng cất phân đoạn không khí lỏng.", prepLab: "Nhiệt phân dung dịch amoni nitrit (NH₄NO₂).", crystalType: "HCP" },
+            { z: 8, sym: "O", nameVi: "Oxy (Oxygen)", nameEn: "Oxygen", mass: "15.999", cat: "phi-kim", period: 2, group: 16, config: "1s² 2s² 2p⁴", valency: "II", state: "Khí", electro: 3.44, radius: 48, melt: -218.8, boil: -183.0, density: "1.429 g/L", year: "1774", discoverer: "Joseph Priestley", desc: "Duy trì hô hấp và sự cháy, ứng dụng y tế và luyện kim.", isotopes: [{name: "Oxy-16 (¹⁶O)", abundance: "99.757%", note: "Bền"}, {name: "Oxy-18 (¹⁸O)", abundance: "0.205%", note: "Bền"}], prepInd: "Chưng cất phân đoạn không khí lỏng.", prepLab: "Nhiệt phân thuốc tím (KMnO₄) hoặc KClO₃.", crystalType: "Cubic" },
+            { z: 9, sym: "F", nameVi: "Flo (Fluorine)", nameEn: "Fluorine", mass: "18.998", cat: "halozen", period: 2, group: 17, config: "1s² 2s² 2p⁵", valency: "I", state: "Khí", electro: 3.98, radius: 42, melt: -219.6, boil: -188.1, density: "1.696 g/L", year: "1886", discoverer: "Henri Moissan", desc: "Phi kim mạnh nhất, dùng chống sâu răng và chảo chống dính Teflon.", isotopes: [{name: "Flo-19 (¹⁹F)", abundance: "100%", note: "Bền duy nhất"}], prepInd: "Điện phân hỗn hợp KHF₂ và HF lỏng.", prepLab: "Phương pháp điện phân chuyên dụng.", crystalType: "Cubic" },
+            { z: 10, sym: "Ne", nameVi: "Neon (Neon)", nameEn: "Neon", mass: "20.180", cat: "khi-hiem", period: 2, group: 18, config: "1s² 2s² 2p⁶", valency: "0 (Trơ)", state: "Khí", electro: null, radius: 38, melt: -248.6, boil: -246.1, density: "0.900 g/L", year: "1898", discoverer: "William Ramsay", desc: "Khí hiếm phát ra ánh sáng đỏ cam đặc trưng, dùng làm biển quảng cáo.", isotopes: [{name: "Neon-20 (²⁰Ne)", abundance: "90.48%", note: "Bền"}], prepInd: "Chưng cất phân đoạn không khí lỏng.", prepLab: "Hấp phụ than hoạt tính nhiệt độ thấp.", crystalType: "Cubic" }
+        ];
+
+        // Metadata list for full 118 elements with specific crystal structures, full detailed orbital configs and valencies
+        const fullElementsMetadata = [
+            {z:11, sym:"Na", nameVi:"Natri (Sodium)", period:3, group:1, cat:"kim-loai-kiem", mass:"22.990", config:"1s² 2s² 2p⁶ 3s¹", valency:"I", state:"Rắn", electro:0.93, radius:190, melt:97.8, boil:883, density:"0.968 g/cm³", year:"1807", discoverer:"Humphry Davy", desc:"Kim loại kiềm mềm phản ứng mạnh với nước. Thành phần muối ăn (NaCl) và xà phòng.", isotopes:[{name:"Natri-23", abundance:"100%", note:"Bền"}], prepInd:"Điện phân chảy NaCl nóng chảy.", prepLab:"Khử muối clorua.", crystalType:"BCC"},
+            {z:12, sym:"Mg", nameVi:"Magie (Magnesium)", period:3, group:2, cat:"kim-loai-kiem-tho", mass:"24.305", config:"1s² 2s² 2p⁶ 3s²", valency:"II", state:"Rắn", electro:1.31, radius:145, melt:650, boil:1090, density:"1.738 g/cm³", year:"1755", discoverer:"Joseph Black", desc:"Kim loại nhẹ cháy với ánh sáng trắng chói. Dùng trong hợp kim ô tô, máy bay và pháo hoa.", isotopes:[{name:"Magie-24", abundance:"79%", note:"Bền"}], prepInd:"Điện phân MgCl₂ từ nước biển.", prepLab:"Khử oxit bằng nhiệt.", crystalType:"HCP"},
+            {z:13, sym:"Al", nameVi:"Nhôm (Aluminium)", period:3, group:13, cat:"kim-loai-yeu", mass:"26.982", config:"1s² 2s² 2p⁶ 3s² 3p¹", valency:"III", state: "Rắn", electro:1.61, radius:118, melt:660.3, boil:2470, density:"2.70 g/cm³", year:"1825", discoverer:"H.C. Ørsted", desc:"Kim loại phổ biến trên vỏ Trái Đất. Nhẹ, bền, chống ăn mòn, làm vỏ máy bay và lon nước.", isotopes:[{name:"Nhôm-27", abundance:"100%", note:"Bền"}], prepInd:"Điện phân nhôm oxit nóng chảy trong criolit.", prepLab:"Khử muối nhôm.", crystalType:"FCC"},
+            {z:14, sym:"Si", nameVi:"Silic (Silicon)", period:3, group:14, cat:"ban-kim", mass:"28.085", config:"1s² 2s² 2p⁶ 3s² 3p²", valency:"IV", state:"Rắn", electro:1.90, radius:111, melt:1414, boil:3265, density:"2.33 g/cm³", year:"1824", discoverer:"J.J. Berzelius", desc:"Vật liệu bán dẫn cốt lõi của ngành vi điện tử (chip vi xử lý), pin mặt trời và thủy tinh.", isotopes:[{name:"Silic-28", abundance:"92.2%", note:"Bền"}], prepInd:"Khử cát silica bằng cacbon trong lò điện.", prepLab: "Khử SiO₂ bằng magie.", crystalType: "Diamond"},
+            {z:15, sym:"P", nameVi:"Phốt pho (Phosphorus)", period:3, group:15, cat:"phi-kim", mass:"30.974", config:"1s² 2s² 2p⁶ 3s² 3p³", valency:"III, V", state:"Rắn", electro:2.19, radius:98, melt:44.1, boil:280.5, density:"1.823 g/cm³", year:"1669", discoverer:"Hennig Brand", desc:"Có các thù hình trắng và đỏ. Cần thiết cho sinh học, sản xuất phân bón NPK và diêm an toàn.", isotopes:[{name:"Phốt pho-31", abundance:"100%", note:"Bền"}], prepInd:"Nung quặng photphat với cát và than cốc.", prepLab: "Nhiệt phân quặng.", crystalType: "Cubic"},
+            {z:16, sym:"S", nameVi:"Lưu huỳnh (Sulfur)", period:3, group:16, cat:"phi-kim", mass:"32.06", config:"1s² 2s² 2p⁶ 3s² 3p⁴", valency:"II, IV, VI", state:"Rắn", electro:2.58, radius:88, melt:115.2, boil:444.6, density:"2.07 g/cm³", year:"Cổ đại", discoverer:"Thời cổ đại", desc: "Chất rắn màu vàng tươi dùng lưu hóa cao su và sản xuất axit sunfuric (H₂SO₄).", isotopes:[{name:"Lưu huỳnh-32", abundance:"95%", note:"Bền"}], prepInd:"Khai thác mỏ hoặc phương pháp Frasch.", prepLab: "Đốt cháy khí H₂S thiếu oxy.", crystalType: "Orthorhombic"},
+            {z:17, sym:"Cl", nameVi:"Clo (Chlorine)", period:3, group:17, cat:"halozen", mass:"35.45", config:"1s² 2s² 2p⁶ 3s² 3p⁵", valency:"I, III, V, VII", state:"Khí", electro:3.16, radius:79, melt:-101.5, boil:-34.04, density:"3.214 g/L", year:"1774", discoverer:"C.W. Scheele", desc: "Khí vàng lục độc hại dùng khử trùng nước sinh hoạt, bể bơi và sản xuất nhựa PVC.", isotopes:[{name:"Clo-35", abundance:"75.8%", note:"Bền"}], prepInd: "Điện phân dung dịch NaCl có màng ngăn.", prepLab: "Cho MnO₂ tác dụng với dung dịch HCl đặc.", crystalType: "Cubic"},
+            {z:18, sym:"Ar", nameVi:"Argon (Argon)", period:3, group:18, cat:"khi-hiem", mass:"39.948", config:"1s² 2s² 2p⁶ 3s² 3p⁶", valency:"0 (Trơ)", state:"Khí", electro:null, radius:71, melt:-189.3, boil:-185.8, density:"1.784 g/L", year:"1894", discoverer:"Lord Rayleigh, W. Ramsay", desc: "Khí trơ phổ biến tạo môi trường hàn kim loại và bóng đèn.", isotopes:[{name:"Argon-40", abundance:"99.6%", note:"Bền"}], prepInd: "Chưng cất phân đoạn không khí lỏng.", prepLab: "Hấp phụ khí quyển.", crystalType: "Cubic"}
+        ];
+
+        // Populate elements 11 to 118 programmatically with detailed orbital configs and valencies
+        for (let i = 11; i <= 118; i++) {
+            if (!elementsData.find(e => e.z === i)) {
+                const foundMeta = fullElementsMetadata.find(m => m.z === i);
+                let p = 4, g = ((i - 19) % 18) + 1;
+                if (i >= 11 && i <= 18) { p = 3; g = i === 18 ? 18 : (i >= 13 ? i + 2 : (i === 11 ? 1 : 2)); }
+                else if (i >= 19 && i <= 36) { p = 4; g = i - 18; }
+                else if (i >= 37 && i <= 54) { p = 5; g = i - 36; }
+                else if (i >= 55 && i <= 86) { 
+                    p = 6; 
+                    if (i === 57) g = 3; 
+                    else if (i >= 58 && i <= 71) { p = 6; g = 3; } 
+                    else { g = i - 54; if(i > 71) g = i - 54 - 14; }
+                }
+                else if (i >= 87 && i <= 118) { 
+                    p = 7; 
+                    if (i === 89) g = 3; 
+                    else if (i >= 90 && i <= 103) { p = 7; g = 3; } 
+                    else { g = i - 86; if(i > 103) g = i - 86 - 14; }
+                }
+
+                let cat = 'kim-loai-chuyen-tiep';
+                if ([9,17,35,53,85,117].includes(i)) cat = 'halozen';
+                else if ([2,10,18,36,54,86,118].includes(i)) cat = 'khi-hiem';
+                else if ([3,11,19,37,55,87].includes(i)) cat = 'kim-loai-kiem';
+                else if ([4,12,20,38,56,88].includes(i)) cat = 'kim-loai-kiem-tho';
+                else if ([5,14,32,33,51,52,84].includes(i)) cat = 'ban-kim';
+                else if ([1,6,7,8,15,16,34].includes(i)) cat = 'phi-kim';
+                else if (i >= 57 && i <= 71) cat = 'lanthan';
+                else if (i >= 89 && i <= 103) cat = 'actini';
+                else if ([13,31,49,50,81,82,83,113,114,115,116].includes(i)) cat = 'kim-loai-yeu';
+
+                const symbolList = ["","H","He","Li","Be","B","C","N","O","F","Ne","Na","Mg","Al","Si","P","S","Cl","Ar","K","Ca","Sc","Ti","V","Cr","Mn","Fe","Co","Ni","Cu","Zn","Ga","Ge","As","Se","Br","Kr","Rb","Sr","Y","Zr","Nb","Mo","Tc","Ru","Rh","Pd","Ag","Cd","In","Sn","Sb","Te","I","Xe","Cs","Ba","La","Ce","Pr","Nd","Pm","Sm","Eu","Gd","Tb","Dy","Ho","Er","Tm","Yb","Lu","Hf","Ta","W","Re","Os","Ir","Pt","Au","Hg","Tl","Pb","Bi","Po","At","Rn","Fr","Ra","Ac","Th","Pa","U","Np","Pu","Am","Cm","Bk","Cf","Es","Fm","Md","No","Lr","Rf","Db","Sg","Bh","Hs","Mt","Ds","Rg","Cn","Nh","Fl","Mc","Lv","Ts","Og"];
+                const nameList = ["","Hydro (Hydrogen)","Heli (Helium)","Liti (Lithium)","Bêryli (Beryllium)","Bo (Boron)","Cacbon (Carbon)","Nitơ (Nitrogen)","Oxy (Oxygen)","Flo (Fluorine)","Neon (Neon)","Natri (Sodium)","Magie (Magnesium)","Nhôm (Aluminium)","Silic (Silicon)","Phốt pho (Phosphorus)","Lưu huỳnh (Sulfur)","Clo (Chlorine)","Argon (Argon)","Kali (Potassium)","Canxi (Calcium)","Scandi (Scandium)","Titan (Titanium)","Vanadi (Vanadium)","Crom (Chromium)","Mangan (Manganese)","Sắt (Iron)","Coban (Cobalt)","Niken (Nickel)","Đồng (Copper)","Kẽm (Zinc)","Gali (Gallium)","Gemani (Germanium)","Asen (Arsenic)","Selen (Selenium)","Brom (Bromine)","Kripton (Krypton)","Rubidi (Rubidium)","Stronti (Strontium)","Ytri (Yttrium)","Zirconi (Zirconium)","Niobi (Niobium)","Molibden (Molybdenum)","Tecneti (Technetium)","Ruteni (Ruthenium)","Rodi (Rhodium)","Paladi (Palladium)","Bạc (Silver)","Cadimi (Cadmium)","Indi (Indium)","Thiếc (Tin)","Antimon (Antimony)","Telua (Tellurium)","Iốt (Iodine)","Xenon (Xenon)","Cesi (Caesium)","Bari (Barium)","Lantan (Lanthanum)","Ceri (Cerium)","Praseodym (Praseodymium)","Neodym (Neodymium)","Prometi (Promethium)","Samari (Samarium)","Europi (Europium)","Gadolini (Gadolinium)","Terbi (Terbium)","Dysprosi (Dysprosium)","Holmi (Holmium)","Erbi (Erbium)","Tuli (Thulium)","Yterbi (Ytterbium)","Luteti (Lutetium)","Hafni (Hafnium)","Tantan (Tantalum)","Vonfram (Tungsten)","Reni (Rhenium)","Osmi (Osmium)","Iridi (Iridium)","Bạch kim (Platinum)","Vàng (Gold)","Thủy ngân (Mercury)","Tali (Thallium)","Chì (Lead)","Bismut (Bismuth)","Poloni (Polonium)","Astatin (Astatine)","Radon (Radon)","Fransi (Francium)","Radi (Radium)","Actini (Actinium)","Xori (Thorium)","Protactini (Protactinium)","Urani (Uranium)","Neptuni (Neptunium)","Plutoni (Plutonium)","Americi (Americium)","Curi (Curium)","Berkeli (Berkelium)","Californi (Californium)","Ensteini (Einsteinium)","Phecmi (Fermium)","Mendelevi (Mendelevium)","Nobeli (Nobelium)","Laurenci (Lawrencium)","Rơteri (Rutherfordium)","Dubni (Dubnium)","Seaborgi (Seaborgium)","Bohri (Bohrium)","Hassi (Hassium)","Maitneri (Meitnerium)","Darmstati (Darmstadtium)","Rơngen (Roentgenium)","Copenici (Copernicium)","Nihoni (Nihonium)","Flerovi (Flerovium)","Moscovi (Moscovium)","Livermori (Livermorium)","Tennessine (Tennessine)","Oganesson (Oganesson)"];
+
+                const nobleCores = [
+                    {z: 86, label: "[Rn] 7s² 5f¹⁴ 6d¹⁰ 6p⁶"},
+                    {z: 54, label: "[Xe] 6s² 4f¹⁴ 5d¹⁰ 5p⁶"},
+                    {z: 36, label: "[Kr] 5s² 4d¹⁰ 4p⁶"},
+                    {z: 18, label: "[Ar] 4s² 3d¹⁰ 4p⁶"},
+                    {z: 10, label: "[Ne] 3s² 3p⁶"},
+                    {z: 2, label: "[He] 2s² 2p⁶"}
+                ];
+                let orbitalConfig = foundMeta ? foundMeta.config : "";
+                if (!foundMeta) {
+                    let core = nobleCores.find(c => i > c.z);
+                    if (core) {
+                        let diff = i - core.z;
+                        orbitalConfig = `${core.label} (+${diff}e)`;
+                    } else {
+                        orbitalConfig = `1s² ... (${i}e)`;
+                    }
+                }
+
+                let defaultValency = "I, II, III, IV";
+                if (g === 1) defaultValency = "I";
+                else if (g === 2) defaultValency = "II";
+                else if (g === 13) defaultValency = "III";
+                else if (g === 14) defaultValency = "IV, II";
+                else if (g === 15) defaultValency = "III, V";
+                else if (g === 16) defaultValency = "II, IV, VI";
+                else if (g === 17) defaultValency = "I, III, V, VII";
+                else if (g === 18) defaultValency = "0 (Trơ)";
+                else if (cat === 'kim-loai-chuyen-tiep') defaultValency = "II, III, IV (Đa hóa trị)";
+
+                let cType = "BCC";
+                if ([11,13,29,47,79,45,46,24,28].includes(i)) cType = "FCC";
+                else if ([3,19,37,55,87,23,26,41,42,56,73,74,75].includes(i)) cType = "BCC";
+                else if ([4,12,30,48,80,21,22,39,40,71,72,76,77].includes(i)) cType = "HCP";
+                else if ([5,32,14].includes(i)) cType = "Diamond";
+                else if ([33,51,83].includes(i)) cType = "Rhombohedral";
+                else if ([16,34,52].includes(i)) cType = "Orthorhombic";
+
+                elementsData.push({
+                    z: i,
+                    sym: symbolList[i] || `El${i}`,
+                    nameVi: nameList[i] || `Nguyên tố ${i}`,
+                    nameEn: `Element ${i}`,
+                    mass: foundMeta ? foundMeta.mass : `(${i * 2})`,
+                    cat: cat,
+                    period: foundMeta ? foundMeta.period : p,
+                    group: foundMeta ? foundMeta.group : g,
+                    config: orbitalConfig,
+                    valency: foundMeta && foundMeta.valency ? foundMeta.valency : defaultValency,
+                    state: foundMeta ? foundMeta.state : (i === 80 || i === 35 ? "Lỏng" : "Rắn"),
+                    electro: foundMeta ? foundMeta.electro : 1.5,
+                    radius: foundMeta ? foundMeta.radius : 150,
+                    melt: foundMeta ? foundMeta.melt : 1000,
+                    boil: foundMeta ? foundMeta.boil : 2000,
+                    density: foundMeta ? foundMeta.density : "5.0 g/cm³",
+                    year: foundMeta ? foundMeta.year : (i > 103 ? "Hiện đại" : "1950"),
+                    discoverer: foundMeta ? foundMeta.discoverer : "Nhiều nhà khoa học",
+                    desc: foundMeta ? foundMeta.desc : `Nguyên tố hóa học chuẩn IUPAC số hiệu Z = ${i}.`,
+                    isotopes: foundMeta ? foundMeta.isotopes : [{name: `Đồng vị (${i})`, abundance: "100%", note: "Phóng xạ nhân tạo"}],
+                    prepInd: foundMeta ? foundMeta.prepInd : "Tổng hợp bằng máy gia tốc hạt.",
+                    prepLab: foundMeta ? foundMeta.prepLab : "Bắn phá hạt nhân nguyên tử.",
+                    crystalType: foundMeta ? foundMeta.crystalType : cType
+                });
+            }
+        }
+
+        const categoryLabels = {
+            "phi-kim": "Phi kim", "khi-hiem": "Khí hiếm", "kim-loai-kiem": "Kim loại kiềm",
+            "kim-loai-kiem-tho": "Kim loại kiềm thổ", "ban-kim": "Bán kim", "halozen": "Halogen",
+            "kim-loai-chuyen-tiep": "Kim loại chuyển tiếp", "kim-loai-yeu": "Kim loại yếu",
+            "lanthan": "Họ Lanthan", "actini": "Họ Actini"
+        };
+
+        function createElementCard(el) {
+            const card = document.createElement('div');
+            card.className = `element-card cat-${el.cat} p-1 rounded-xl border flex flex-col justify-between cursor-pointer select-none relative aspect-square text-center shadow-sm`;
+            card.dataset.z = el.z;
+            card.dataset.cat = el.cat;
+            card.dataset.nameVi = el.nameVi.toLowerCase();
+            card.dataset.nameEn = el.nameEn.toLowerCase();
+            card.dataset.sym = el.sym.toLowerCase();
+
+            card.innerHTML = `
+                <div class="flex justify-between items-center text-[9px] leading-none opacity-80">
+                    <span class="font-bold">${el.z}</span>
+                </div>
+                <div class="font-black text-sm sm:text-base md:text-lg leading-tight my-auto">${el.sym}</div>
+                <div class="text-[8px] truncate font-medium opacity-90 leading-none">${el.nameVi}</div>
+            `;
+            card.addEventListener('click', () => openModal(el));
+            return card;
+        }
+
+        function createPlaceholderCard(item) {
+            const card = document.createElement('div');
+            card.className = `cat-${item.cat} p-1 rounded-xl border border-dashed flex flex-col justify-center items-center select-none aspect-square text-center opacity-80`;
+            card.innerHTML = `<span class="text-[10px] font-bold">${item.label}</span><span class="text-[9px] leading-tight mt-0.5">${item.name}</span>`;
+            return card;
+        }
+
+        function createEmptySlot() {
+            const div = document.createElement('div');
+            div.className = 'w-full aspect-square pointer-events-none';
+            return div;
+        }
+
+        function renderTable() {
+            const p1 = document.getElementById('period1Grid');
+            const p2 = document.getElementById('period2Grid');
+            const p3 = document.getElementById('period3Grid');
+            const p4 = document.getElementById('period4Grid');
+            const p5 = document.getElementById('period5Grid');
+            const p6 = document.getElementById('period6Grid');
+            const p7 = document.getElementById('period7Grid');
+            
+            const lGrid = document.getElementById('fBlockLanthan');
+            const aGrid = document.getElementById('fBlockActinid');
+
+            [p1, p2, p3, p4, p5, p6, p7, lGrid, aGrid].forEach(el => el.innerHTML = '');
+
+            const rows = [p1, p2, p3, p4, p5, p6, p7];
+            const mainGridSlots = Array(7).fill(null).map(() => Array(18).fill(null));
+
+            elementsData.forEach(el => {
+                if (el.z >= 57 && el.z <= 71) return;
+                if (el.z >= 89 && el.z <= 103) return;
+
+                const r = el.period - 1;
+                const c = el.group - 1;
+                if (r >= 0 && r < 7 && c >= 0 && c < 18) {
+                    mainGridSlots[r][c] = el;
+                }
+            });
+
+            mainGridSlots[5][2] = { placeholder: true, label: "57-71", name: "Lanthan", cat: "lanthan" };
+            mainGridSlots[6][2] = { placeholder: true, label: "89-103", name: "Actini", cat: "actini" };
+
+            for (let r = 0; r < 7; r++) {
+                for (let c = 0; c < 18; c++) {
+                    const item = mainGridSlots[r][c];
+                    if (item) {
+                        rows[r].appendChild(item.placeholder ? createPlaceholderCard(item) : createElementCard(item));
+                    } else {
+                        rows[r].appendChild(createEmptySlot());
+                    }
+                }
+            }
+
+            for (let i = 0; i < 2; i++) lGrid.appendChild(createEmptySlot());
+            elementsData.filter(e => e.z >= 57 && e.z <= 71).forEach(el => lGrid.appendChild(createElementCard(el)));
+            for (let i = 0; i < 1; i++) lGrid.appendChild(createEmptySlot());
+
+            for (let i = 0; i < 2; i++) aGrid.appendChild(createEmptySlot());
+            elementsData.filter(e => e.z >= 89 && e.z <= 103).forEach(el => aGrid.appendChild(createElementCard(el)));
+            for (let i = 0; i < 1; i++) aGrid.appendChild(createEmptySlot());
+        }
+
+        // Search & Filter Controller
+        function applyFilters() {
+            const query = document.getElementById('searchInput').value.trim().toLowerCase();
+            const activeCategoryBtn = document.querySelector('.cat-btn.active');
+            const selectedCat = activeCategoryBtn ? activeCategoryBtn.dataset.cat : 'all';
+
+            document.querySelectorAll('.element-card').forEach(card => {
+                const z = card.dataset.z;
+                const sym = card.dataset.sym;
+                const nameVi = card.dataset.nameVi;
+                const nameEn = card.dataset.nameEn;
+                const cat = card.dataset.cat;
+
+                const matchesSearch = !query || z === query || sym.includes(query) || nameVi.includes(query) || nameEn.includes(query);
+                const matchesCategory = selectedCat === 'all' || cat === selectedCat;
+
+                if (matchesSearch && matchesCategory) {
+                    card.classList.remove('dimmed');
+                    if (query) card.classList.add('highlighted');
+                    else card.classList.remove('highlighted');
+                } else {
+                    card.classList.add('dimmed');
+                    card.classList.remove('highlighted');
+                }
+            });
+        }
+
+        document.getElementById('searchInput').addEventListener('input', applyFilters);
+        document.querySelectorAll('.cat-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active', 'bg-blue-600', 'text-white', 'shadow-sm'));
+                btn.classList.add('active', 'bg-blue-600', 'text-white', 'shadow-sm');
+                applyFilters();
+            });
+        });
+
+        document.getElementById('resetFilterBtn').addEventListener('click', () => {
+            document.getElementById('searchInput').value = '';
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active', 'bg-blue-600', 'text-white', 'shadow-sm'));
+            document.querySelector('.cat-btn[data-cat="all"]').classList.add('active', 'bg-blue-600', 'text-white', 'shadow-sm');
+            applyFilters();
+        });
+
+        // Web app feature: Keyboard shortcuts for search and navigation
+        window.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+                e.preventDefault();
+                const searchInput = document.getElementById('searchInput');
+                if (searchInput) {
+                    searchInput.focus();
+                    searchInput.select();
+                }
+            }
+        });
+
+        // Modal Controllers & Simulations
+        const modal = document.getElementById('elementModal');
+        let currentActiveEl = null;
+        let bohrAnimId, crystalAnimId;
+
+        function openModal(el) {
+            currentActiveEl = el;
+            document.getElementById('modalAtomicNum').textContent = `Z = ${el.z}`;
+            document.getElementById('modalSymbol').textContent = el.sym;
+            document.getElementById('modalMass').textContent = `${el.mass} u`;
+
+            const bigSymbolBox = document.getElementById('modalBigSymbol');
+            bigSymbolBox.className = `w-24 h-24 rounded-2xl border-2 flex flex-col items-center justify-center font-bold shadow-xl cat-${el.cat}`;
+
+            const badge = document.getElementById('modalCategoryBadge');
+            badge.textContent = categoryLabels[el.cat] || el.cat;
+            badge.className = `inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider mb-2 border cat-${el.cat}`;
+
+            document.getElementById('modalNameVi').textContent = el.nameVi;
+            document.getElementById('modalNameEn').textContent = el.nameEn;
+            document.getElementById('modalPeriodGroup').textContent = `Chu kỳ ${el.period} - Nhóm ${el.group}`;
+            document.getElementById('modalState').textContent = el.state;
+            document.getElementById('modalElectronegativity').textContent = el.electro !== null ? el.electro : 'N/A';
+            document.getElementById('modalValency').textContent = el.valency || 'N/A';
+            document.getElementById('modalRadius').textContent = el.radius !== null ? `${el.radius} pm` : 'N/A';
+
+            document.getElementById('modalElectronConfig').textContent = el.config;
+            document.getElementById('modalMelting').textContent = el.melt !== null ? `${el.melt} °C` : 'N/A';
+            document.getElementById('modalBoiling').textContent = el.boil !== null ? `${el.boil} °C` : 'N/A';
+            document.getElementById('modalDensity').textContent = el.density || 'N/A';
+
+            document.getElementById('modalDiscoveredYear').textContent = el.year;
+            document.getElementById('modalDiscoveredBy').textContent = el.discoverer;
+            document.getElementById('modalDescription').textContent = el.desc;
+
+            const isoContainer = document.getElementById('modalIsotopesContainer');
+            isoContainer.innerHTML = '';
+            if (el.isotopes && el.isotopes.length > 0) {
+                el.isotopes.forEach(iso => {
+                    const div = document.createElement('div');
+                    div.className = "bg-slate-950 p-3.5 rounded-2xl border border-slate-800 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-1 text-xs";
+                    div.innerHTML = `<div><strong class="text-blue-300 font-mono text-sm">${iso.name}</strong> <span class="text-slate-400">(${iso.abundance})</span></div><span class="text-slate-300 italic">${iso.note}</span>`;
+                    isoContainer.appendChild(div);
+                });
+            } else {
+                isoContainer.innerHTML = `<p class="text-xs text-slate-400 italic">Chưa có thông tin đồng vị chi tiết.</p>`;
+            }
+
+            document.getElementById('modalPrepInd').textContent = el.prepInd;
+            document.getElementById('modalPrepLab').textContent = el.prepLab;
+
+            switchModalTab('mSecInfo');
+            modal.classList.remove('hidden');
+        }
+
+        function closeModal() {
+            if (bohrAnimId) cancelAnimationFrame(bohrAnimId);
+            if (crystalAnimId) cancelAnimationFrame(crystalAnimId);
+            modal.classList.add('hidden');
+        }
+
+        document.getElementById('closeModalBtn').addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+
+        function switchModalTab(tabId) {
+            document.querySelectorAll('.modal-section').forEach(sec => sec.classList.add('hidden'));
+            document.querySelectorAll('.modal-tab-btn').forEach(btn => {
+                btn.classList.remove('bg-blue-600', 'text-white', 'border-blue-500');
+                btn.classList.add('bg-slate-800', 'text-slate-300', 'border-slate-700');
+            });
+
+            document.getElementById(tabId).classList.remove('hidden');
+            const activeBtn = document.getElementById('btn_' + tabId);
+            if (activeBtn) {
+                activeBtn.classList.remove('bg-slate-800', 'text-slate-300', 'border-slate-700');
+                activeBtn.classList.add('bg-blue-600', 'text-white', 'border-blue-500');
+            }
+
+            if (bohrAnimId) cancelAnimationFrame(bohrAnimId);
+            if (crystalAnimId) cancelAnimationFrame(crystalAnimId);
+
+            setTimeout(() => {
+                if (tabId === 'mSecBohr') initBohrSimulation();
+                if (tabId === 'mSecCrystal') initCrystalSimulation(currentActiveEl);
+            }, 60);
+        }
+
+        // 3D Crystal Lattice Three.js Simulation (Enhanced with accurate crystal structures)
+        function initCrystalSimulation(el) {
+            const canvas = document.getElementById('crystalCanvas');
+            if (!canvas) return;
+            const scene = new THREE.Scene(); scene.background = new THREE.Color(0x020617);
+            const camera = new THREE.PerspectiveCamera(45, 320 / 300, 0.1, 1000); camera.position.set(4, 4, 5); camera.lookAt(0, 0, 0);
+            const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true }); renderer.setSize(320, 300);
+
+            scene.add(new THREE.AmbientLight(0xffffff, 0.9));
+            const dl = new THREE.DirectionalLight(0xffffff, 1.2); dl.position.set(5, 10, 7); scene.add(dl);
+
+            const group = new THREE.Group(); scene.add(group);
+            const geo = new THREE.SphereGeometry(0.25, 16, 16);
+            const mat = new THREE.MeshStandardMaterial({ color: 0x38bdf8, metalness: 0.3, roughness: 0.4 });
+
+            let positions = [];
+            const type = el.crystalType || 'BCC';
+
+            if (type === 'FCC') {
+                // Lập phương tâm mặt (Face-Centered Cubic)
+                positions = [
+                    [-1,-1,-1], [1,-1,-1], [1,1,-1], [-1,1,-1],
+                    [-1,-1,1], [1,-1,1], [1,1,1], [-1,1,1],
+                    [0,0,-1], [0,0,1], [-1,0,0], [1,0,0], [0,-1,0], [0,1,0]
+                ];
+            } else if (type === 'HCP') {
+                // Lục phương đóng khít (Hexagonal Close-Packed)
+                positions = [
+                    [0, -1.2, -1], [1, -0.6, -1], [1, 0.6, -1], [0, 1.2, -1], [-1, 0.6, -1], [-1, -0.6, -1],
+                    [0, 0, -1],
+                    [0, -1.2, 1], [1, -0.6, 1], [1, 0.6, 1], [0, 1.2, 1], [-1, 0.6, 1], [-1, -0.6, 1],
+                    [0, 0, 1]
+                ];
+            } else if (type === 'Diamond') {
+                // Mạng tinh thể kim cương (Cacbon, Silic...)
+                positions = [
+                    [-1,-1,-1], [1,-1,-1], [1,1,-1], [-1,1,-1],
+                    [-1,-1,1], [1,-1,1], [1,1,1], [-1,1,1],
+                    [0,0,0], [0.5,0.5,0.5], [-0.5,-0.5,0.5], [0.5,-0.5,-0.5], [-0.5,0.5,-0.5]
+                ];
+            } else if (type === 'Rhombohedral') {
+                // Phương phương/Rhombohedral
+                positions = [
+                    [-1,-1,-1], [1,-1,-1], [1,1,-1], [-1,1,-1],
+                    [0,0,0], [0.8,-0.8,0], [-0.8,0.8,0]
+                ];
+            } else {
+                // Mặc định Lập phương tâm khối (Body-Centered Cubic - BCC)
+                positions = [
+                    [-1,-1,-1], [1,-1,-1], [1,1,-1], [-1,1,-1],
+                    [-1,-1,1], [1,-1,1], [1,1,1], [-1,1,1],
+                    [0,0,0]
+                ];
+            }
+
+            positions.forEach(p => {
+                const m = new THREE.Mesh(geo, mat); m.position.set(...p); group.add(m);
+            });
+
+            document.getElementById('crystalModelTitle').textContent = `Cấu trúc mạng tinh thể 3D (${type})`;
+
+            let isDrag = false, pX = 0, pY = 0;
+            canvas.onmousedown = (e) => { isDrag = true; pX = e.clientX; pY = e.clientY; };
+            window.onmouseup = () => { isDrag = false; };
+            canvas.onmousemove = (e) => {
+                if (!isDrag) return;
+                group.rotation.y += (e.clientX - pX) * 0.01; group.rotation.x += (e.clientY - pY) * 0.01;
+                pX = e.clientX; pY = e.clientY;
+            };
+
+            canvas.ontouchstart = (e) => { if(e.touches.length === 1) { isDrag = true; pX = e.touches[0].clientX; pY = e.touches[0].clientY; } };
+            window.ontouchend = () => { isDrag = false; };
+            canvas.ontouchmove = (e) => {
+                if (!isDrag || e.touches.length !== 1) return;
+                group.rotation.y += (e.touches[0].clientX - pX) * 0.01; group.rotation.x += (e.touches[0].clientY - pY) * 0.01;
+                pX = e.touches[0].clientX; pY = e.touches[0].clientY;
+            };
+
+            function animate() {
+                crystalAnimId = requestAnimationFrame(animate);
+                if (!isDrag) group.rotation.y += 0.005;
+                renderer.render(scene, camera);
+            }
+            animate();
+        }
+
+        // Tab Navigation Controller
+        function initTabs() {
+            const tabs = [
+                { btn: document.getElementById('tabPTable'), view: document.getElementById('viewPTable'), tools: document.getElementById('ptableTools') },
+                { btn: document.getElementById('tabSolubility'), view: document.getElementById('viewSolubility'), tools: null },
+                { btn: document.getElementById('tabAcids'), view: document.getElementById('viewAcids'), tools: null },
+                { btn: document.getElementById('tabElectro'), view: document.getElementById('viewElectro'), tools: null }
+            ];
+
+            tabs.forEach(tab => {
+                tab.btn.addEventListener('click', () => {
+                    tabs.forEach(t => { t.btn.classList.remove('active'); t.view.classList.add('hidden'); });
+                    tab.btn.classList.add('active'); tab.view.classList.remove('hidden');
+                    if (tab.tools) tab.tools.classList.remove('hidden');
+                    else document.getElementById('ptableTools').classList.add('hidden');
+                });
+            });
+        }
+
+        // Electrochemical Series Database
+        const electroSeriesData = [
+            { pair: "Li⁺ / Li", reaction: "Li⁺ + 1e⁻ ⇌ Li", e0: "-3.040", note: "Kim loại khử mạnh nhất, phản ứng mãnh liệt với nước ở nhiệt độ thường." },
+            { pair: "K⁺ / K", reaction: "K⁺ + 1e⁻ ⇌ K", e0: "-2.925", note: "Kim loại kiềm hoạt động rất mạnh." },
+            { pair: "Ba²⁺ / Ba", reaction: "Ba²⁺ + 2e⁻ ⇌ Ba", e0: "-2.900", note: "Kim loại kiềm thổ mạnh, tan tốt tạo kiềm." },
+            { pair: "Ca²⁺ / Ca", reaction: "Ca²⁺ + 2e⁻ ⇌ Ca", e0: "-2.840", note: "Tác dụng với nước giải phóng khí H₂." },
+            { pair: "Na⁺ / Na", reaction: "Na⁺ + 1e⁻ ⇌ Na", e0: "-2.714", note: "Khử mạnh, bảo quản ngâm trong dầu hỏa." },
+            { pair: "Mg²⁺ / Mg", reaction: "Mg²⁺ + 2e⁻ ⇌ Mg", e0: "-2.372", note: "Khử khá mạnh, cháy sáng trong không khí." },
+            { pair: "Al³⁺ / Al", reaction: "Al³⁺ + 3e⁻ ⇌ Al", e0: "-1.662", note: "Có lớp màng oxit Al₂O₃ bảo vệ bền vững." },
+            { pair: "2H₂O / H₂ + 2OH⁻", reaction: "2H₂O + 2e⁻ ⇌ H₂ + 2OH⁻", e0: "-0.828", note: "Mốc điện thế nước ở môi trường trung tính/kiềm." },
+            { pair: "Zn²⁺ / Zn", reaction: "Zn²⁺ + 2e⁻ ⇌ Zn", e0: "-0.763", note: "Khử trung bình, dùng mạ chống gỉ (tôn mạ kẽm)." },
+            { pair: "Cr³⁺ / Cr", reaction: "Cr³⁺ + 3e⁻ ⇌ Cr", e0: "-0.740", note: "Kim loại cứng, chống ăn mòn tốt." },
+            { pair: "Fe²⁺ / Fe", reaction: "Fe²⁺ + 2e⁻ ⇌ Fe", e0: "-0.440", note: "Kim loại phổ biến trong luyện kim và xây dựng." },
+            { pair: "Cd²⁺ / Cd", reaction: "Cd²⁺ + 2e⁻ ⇌ Cd", e0: "-0.403", note: "Dùng trong pin Ni-Cd." },
+            { pair: "Ni²⁺ / Ni", reaction: "Ni²⁺ + 2e⁻ ⇌ Ni", e0: "-0.257", note: "Kim loại bền vững, làm hợp kim inox và tiền xu." },
+            { pair: "Sn²⁺ / Sn", reaction: "Sn²⁺ + 2e⁻ ⇌ Sn", e0: "-0.138", note: "Thiếc tráng hộp đựng thực phẩm." },
+            { pair: "Pb²⁺ / Pb", reaction: "Pb²⁺ + 2e⁻ ⇌ Pb", e0: "-0.126", note: "Kim loại nặng chắn tia bức xạ." },
+            { pair: "2H⁺ / H₂", reaction: "2H⁺ + 2e⁻ ⇌ H₂", e0: "0.000", note: "Mốc chuẩn quốc tế (0.00V) của điện cực hydro tiêu chuẩn." },
+            { pair: "Cu²⁺ / Cu", reaction: "Cu²⁺ + 2e⁻ ⇌ Cu", e0: "+0.337", note: "Đứng sau H, không khử được ion H⁺ trong axit thường." },
+            { pair: "2H₂O + O₂ / 4OH⁻", reaction: "O₂ + 2H₂O + 4e⁻ ⇌ 4OH⁻", e0: "+0.401", note: "Quá trình khử oxy trong dung dịch kiềm." },
+            { pair: "Fe³⁺ / Fe²⁺", reaction: "Fe³⁺ + 1e⁻ ⇌ Fe²⁺", e0: "+0.771", note: "Cặp oxy hóa khử ion sắt trong dung dịch." },
+            { pair: "Ag⁺ / Ag", reaction: "Ag⁺ + 1e⁻ ⇌ Ag", e0: "+0.799", note: "Kim loại quý dẫn điện tốt, tạo tủa với halogen." },
+            { pair: "Hg²⁺ / Hg", reaction: "Hg²⁺ + 2e⁻ ⇌ Hg", e0: "+0.851", note: "Kim loại duy nhất lỏng ở điều kiện thường." },
+            { pair: "Pt²⁺ / Pt", reaction: "Pt²⁺ + 2e⁻ ⇌ Pt", e0: "+1.188", note: "Bạch kim cực kỳ trơ hóa học." },
+            { pair: "Au³⁺ / Au", reaction: "Au³⁺ + 3e⁻ ⇌ Au", e0: "+1.520", note: "Kim loại quý hiếm không bị oxy hóa bởi axit đơn thuần." }
+        ];
+
+        function renderElectroSeries() {
+            const tbody = document.getElementById('electroTableBody');
+            tbody.innerHTML = '';
+            electroSeriesData.forEach((item, idx) => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-800/40 transition-colors";
+                tr.innerHTML = `
+                    <td class="p-3 text-center font-bold text-slate-500">${idx + 1}</td>
+                    <td class="p-3 font-mono font-bold text-blue-300">${item.pair}</td>
+                    <td class="p-3 font-mono text-slate-200">${item.reaction}</td>
+                    <td class="p-3 text-center font-mono font-semibold text-teal-400 bg-slate-950/40">${item.e0} V</td>
+                    <td class="p-3 text-slate-400">${item.note}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Expanded Solubility Data Matrix
+        const solubilityData = {
+            cations: [
+                { symbol: "H⁺", name: "Hydro" }, { symbol: "Li⁺", name: "Liti" }, { symbol: "Na⁺", name: "Natri" },
+                { symbol: "K⁺", name: "Kali" }, { symbol: "NH₄⁺", name: "Amoni" }, { symbol: "Mg²⁺", name: "Magie" },
+                { symbol: "Ca²⁺", name: "Canxi" }, { symbol: "Ba²⁺", name: "Bari" }, { symbol: "Al³⁺", name: "Nhôm" },
+                { symbol: "Fe²⁺", name: "Sắt(II)" }, { symbol: "Fe³⁺", name: "Sắt(III)" }, { symbol: "Cu²⁺", name: "Đồng(II)" },
+                { symbol: "Zn²⁺", name: "Kẽm" }, { symbol: "Ag⁺", name: "Bạc" }, { symbol: "Pb²⁺", name: "Chì(II)" }
+            ],
+            anions: [
+                { symbol: "OH⁻", name: "Hydroxid" }, { symbol: "Cl⁻", name: "Clorua" }, { symbol: "Br⁻", name: "Bromua" },
+                { symbol: "I⁻", name: "Iotua" }, { symbol: "NO₃⁻", name: "Nitrat" }, { symbol: "SO₄²⁻", name: "Sulfat" },
+                { symbol: "CO₃²⁻", name: "Cacbonat" }, { symbol: "SO₃²⁻", name: "Sulfit" }, { symbol: "PO₄³⁻", name: "Phosphat" },
+                { symbol: "S²⁻", name: "Sulfua" }, { symbol: "CH₃COO⁻", name: "Axetat" }
+            ],
+            matrix: [
+                ["T", "T", "T", "T", "T", "T", "T", "T", "T", "T", "T"], // H+
+                ["T", "T", "T", "T", "T", "T", "T", "T", "T", "T", "T"], // Li+
+                ["T", "T", "T", "T", "T", "T", "T", "T", "T", "T", "T"], // Na+
+                ["T", "T", "T", "T", "T", "T", "T", "T", "T", "T", "T"], // K+
+                ["T", "T", "T", "T", "T", "T", "T", "T", "T", "T", "T"], // NH4+
+                ["K", "T", "T", "T", "T", "T", "K", "K", "K", "Ph", "T"], // Mg2+
+                ["Í", "T", "T", "T", "T", "Í", "K", "K", "K", "Ph", "T"], // Ca2+
+                ["T", "T", "T", "T", "T", "K", "K", "K", "K", "T", "T"], // Ba2+
+                ["K", "T", "T", "T", "T", "T", "Ph", "Ph", "K", "Ph", "T"], // Al3+
+                ["K", "T", "T", "T", "T", "T", "K", "K", "K", "K", "T"], // Fe2+
+                ["K", "T", "T", "Ph", "T", "T", "Ph", "Ph", "K", "Ph", "T"], // Fe3+
+                ["K", "T", "T", "Ph", "T", "T", "Ph", "K", "K", "K", "T"], // Cu2+
+                ["K", "T", "T", "T", "T", "T", "K", "K", "K", "K", "T"], // Zn2+
+                ["Ph", "K", "K", "K", "T", "Í", "K", "K", "K", "K", "T"], // Ag+
+                ["K", "Í", "Í", "K", "T", "K", "K", "K", "K", "K", "T"]  // Pb2+
+            ]
+        };
+
+        const acidRadicalsData = [
+            { formula: "Cl⁻", name: "Clorua", valency: "I", acidFormula: "HCl", acidName: "Axit clohidric", strength: "Mạnh", desc: "Đa số muối clorua tan tốt trong nước, trừ AgCl (tủa trắng) và PbCl₂ (ít tan ở nhiệt độ thường)." },
+            { formula: "NO₃⁻", name: "Nitrat", valency: "I", acidFormula: "HNO₃", acidName: "Axit nitric", strength: "Mạnh", desc: "Tất cả các muối nitrat đều tan rất tốt trong nước và có tính oxy hóa mạnh." },
+            { formula: "SO₄²⁻", name: "Sulfat", valency: "II", acidFormula: "H₂SO₄", acidName: "Axit sunfuric", strength: "Mạnh", desc: "Hầu hết muối sulfat tan; ngoại trừ BaSO₄, PbSO₄ (không tan) và CaSO₄, Ag₂SO₄ (ít tan)." },
+            { formula: "CO₃²⁻", name: "Cacbonat", valency: "II", acidFormula: "H₂CO₃", acidName: "Axit cacbonic", strength: "Yếu / Không bền", desc: "Chỉ muối cacbonat của kim loại kiềm và amoni tan. Phản ứng với axit mạnh sinh ra khí CO₂." },
+            { formula: "PO₄³⁻", name: "Phosphat", valency: "III", acidFormula: "H₃PO₄", acidName: "Axit photphoric", strength: "Trung bình", desc: "Đa số muối photphat trung hòa không tan, trừ muối của kim loại kiềm và amoni." },
+            { formula: "CH₃COO⁻", name: "Axetat", valency: "I", acidFormula: "CH₃COOH", acidName: "Axit axetic", strength: "Yếu", desc: "Gốc axit hữu cơ phổ biến. Hầu hết các muối axetat đều tan tốt trong nước." },
+            { formula: "SO₃²⁻", name: "Sulfit", valency: "II", acidFormula: "H₂SO₃", acidName: "Axit sunfurơ", strength: "Yếu", desc: "Tương tự cacbonat, tác dụng với axit mạnh giải phóng khí SO₂ có mùi hắc đặc trưng." },
+            { formula: "S²⁻", name: "Sulfua", valency: "II", acidFormula: "H₂S", acidName: "Axit sunfuhidric", strength: "Yếu", desc: "Chỉ muối sulfua của nhóm IA, IIA và amoni tan. Nhiều muối sulfua có màu tủa đặc trưng (CuS, PbS đen)." },
+            { formula: "Br⁻", name: "Bromua", valency: "I", acidFormula: "HBr", acidName: "Axit bromhidric", strength: "Mạnh", desc: "Tính chất tương tự clorua, đa số tan tốt trong nước trừ AgBr và PbBr₂." },
+            { formula: "I⁻", name: "Iotua", valency: "I", acidFormula: "HI", acidName: "Axit iot-hidric", strength: "Cực mạnh", desc: "Đa số tan, trừ AgI (vàng đậm) và PbI₂ (vàng tươi kết tủa dạng vảy óng ánh)." },
+            { formula: "OH⁻", name: "Hydroxid", valency: "I", acidFormula: "H₂O", nameVal: "Base", strength: "Mạnh (Kiềm)", desc: "Chỉ có kiềm (NaOH, KOH, Ba(OH)₂...) tan tốt. Các hydroxide kim loại khác kết tủa không tan." }
+        ];
+
+        function renderSolubilityTable() {
+            const table = document.getElementById('solubilityMatrixTable');
+            const catSel = document.getElementById('solubilityCationSelect');
+            const anSel = document.getElementById('solubilityAnionSelect');
+            const quickRes = document.getElementById('solubilityQuickResult');
+
+            solubilityData.cations.forEach((c, idx) => catSel.add(new Option(`${c.symbol} (${c.name})`, idx)));
+            solubilityData.anions.forEach((a, idx) => anSel.add(new Option(`${a.symbol} (${a.name})`, idx)));
+
+            function update() {
+                const sCat = catSel.value;
+                const sAn = anSel.value;
+
+                let html = '<thead><tr class="bg-slate-950 text-slate-300 border-b border-slate-700"><th class="p-2.5 text-left border-r border-slate-700 font-bold sticky left-0 bg-slate-950 z-10">Anion \\ Cation</th>';
+                solubilityData.cations.forEach((c, cIdx) => {
+                    const highlight = sCat !== 'all' && parseInt(sCat) === cIdx;
+                    html += `<th class="p-2 border-r border-slate-800 ${highlight ? 'bg-blue-900/60 text-blue-200' : ''}">${c.symbol}</th>`;
+                });
+                html += '</tr></thead><tbody>';
+
+                solubilityData.anions.forEach((anion, aIdx) => {
+                    const highlightAn = sAn !== 'all' && parseInt(sAn) === aIdx;
+                    html += `<tr class="border-b border-slate-800/80"><td class="p-2 text-left font-semibold text-slate-300 border-r border-slate-800 sticky left-0 bg-slate-900 z-10 ${highlightAn ? 'bg-blue-900/60 text-blue-200' : ''}">${anion.symbol} <span class="text-[10px] text-slate-500 font-normal">(${anion.name})</span></td>`;
+                    
+                    solubilityData.cations.forEach((cation, cIdx) => {
+                        const status = solubilityData.matrix[cIdx][aIdx];
+                        const isSelected = (sCat !== 'all' && parseInt(sCat) === cIdx) && (sAn !== 'all' && parseInt(sAn) === aIdx);
+                        let cls = status === 'T' ? 'bg-emerald-500/15 text-emerald-400 font-bold' : (status === 'K' ? 'bg-rose-500/15 text-rose-400 font-bold' : (status === 'Í' ? 'bg-amber-500/15 text-amber-400 font-bold' : 'bg-purple-500/15 text-purple-400 font-bold'));
+                        if (isSelected) cls += ' ring-2 ring-blue-400 scale-105 z-20';
+                        html += `<td class="p-2 border-r border-slate-800 ${cls}">${status}</td>`;
+                    });
+                    html += '</tr>';
+                });
+                table.innerHTML = html + '</tbody>';
+
+                if (sCat !== 'all' && sAn !== 'all') {
+                    const c = solubilityData.cations[sCat];
+                    const a = solubilityData.anions[sAn];
+                    const val = solubilityData.matrix[sCat][sAn];
+                    let descText = val === 'T' ? 'Tan tốt trong nước' : (val === 'K' ? 'Không tan (Kết tủa)' : (val === 'Í' ? 'Ít tan trong nước' : 'Phân hủy trong nước'));
+                    quickRes.textContent = `Tra cứu: ${c.symbol} + ${a.symbol} ➔ ${val} (${descText})`;
+                    quickRes.classList.remove('hidden');
+                } else {
+                    quickRes.classList.add('hidden');
+                }
+            }
+            catSel.onchange = update; anSel.onchange = update;
+            update();
+        }
+
+        function renderAcidRadicals() {
+            const container = document.getElementById('acidRadicalsGrid');
+            container.innerHTML = '';
+            acidRadicalsData.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "bg-slate-950 border border-slate-800 rounded-2xl p-4 flex flex-col justify-between";
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-2xl font-black text-teal-300 font-mono bg-teal-950/60 px-3 py-1.5 rounded-xl border border-teal-800/50">${item.formula}</span>
+                            <div>
+                                <h4 class="text-base font-bold text-white text-right">${item.name}</h4>
+                                <span class="text-xs text-slate-400 block text-right">Hóa trị: <strong class="text-slate-200">${item.valency}</strong></span>
+                            </div>
+                        </div>
+                        <div class="space-y-1.5 text-xs text-slate-300 bg-slate-900 p-3 rounded-xl border border-slate-800 mb-3">
+                            <div class="flex justify-between"><span class="text-slate-400">Axit tương ứng:</span><span class="font-bold text-blue-300 font-mono">${item.acidFormula}</span></div>
+                            <div class="flex justify-between"><span class="text-slate-400">Tên axit:</span><span class="text-slate-200 font-medium">${item.acidName}</span></div>
+                            <div class="flex justify-between"><span class="text-slate-400">Độ mạnh:</span><span class="text-amber-300 font-semibold">${item.strength}</span></div>
+                        </div>
+                        <p class="text-xs text-slate-400 leading-relaxed">${item.desc}</p>
+                    </div>`;
+                container.appendChild(card);
+            });
+        }
+
+        // Bohr Atom 2D Canvas Animation (Enhanced)
+        function initBohrSimulation() {
+            const canvas = document.getElementById('bohrCanvas');
+            const shellInfo = document.getElementById('bohrShellInfo');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            canvas.width = 340; canvas.height = 300;
+            let angle = 0;
+
+            // Calculate electron distribution in shells (K, L, M, N...) based on atomic number Z
+            const z = currentActiveEl.z;
+            let shells = [];
+            let rem = z;
+            const capacities = [2, 8, 18, 32, 32, 18, 8];
+            for (let cap of capacities) {
+                if (rem <= 0) break;
+                let count = Math.min(rem, cap);
+                shells.push(count);
+                rem -= count;
+            }
+
+            shellInfo.innerHTML = shells.map((count, idx) => `<span class="font-mono">Lớp ${['K','L','M','N','O','P','Q'][idx]}: <strong class="text-sky-400">${count}e⁻</strong></span>`).join('');
+
+            function render() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                const cx = canvas.width / 2, cy = canvas.height / 2;
+
+                // Draw Nucleus
+                ctx.beginPath(); ctx.arc(cx, cy, 30, 0, Math.PI * 2);
+                ctx.fillStyle = '#ef4444'; ctx.fill();
+                ctx.fillStyle = '#fff'; ctx.font = 'bold 12px Inter'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+                ctx.fillText(currentActiveEl.sym, cx, cy - 6);
+                ctx.font = '9px Inter';
+                ctx.fillText(`Z=${z}`, cx, cy + 9);
+
+                // Draw Electron Shells & Electrons
+                let baseRadius = 50;
+                shells.forEach((electronCount, sIdx) => {
+                    const r = baseRadius + (sIdx * 25);
+                    ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2);
+                    ctx.strokeStyle = 'rgba(56, 189, 248, 0.25)'; ctx.setLineDash([3, 3]); ctx.stroke(); ctx.setLineDash([]);
+
+                    for (let i = 0; i < electronCount; i++) {
+                        const theta = (angle * (sIdx % 2 === 0 ? 1 : -1) * (0.5 / (sIdx + 1))) + (i * 2 * Math.PI / electronCount);
+                        ctx.beginPath(); ctx.arc(cx + r * Math.cos(theta), cy + r * Math.sin(theta), 4, 0, Math.PI * 2);
+                        ctx.fillStyle = '#38bdf8'; ctx.fill();
+                    }
+                });
+                angle += 0.015;
+                bohrAnimId = requestAnimationFrame(render);
+            }
+            render();
+        }
+
+        window.onload = function() {
+            renderTable();
+            initTabs();
+            renderSolubilityTable();
+            renderAcidRadicals();
+            renderElectroSeries();
+        };
+    </script>
+</body>
+</html>
